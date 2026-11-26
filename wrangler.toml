@@ -1,0 +1,9 @@
+name = "arena-store"
+pages_build_output_dir = "./dist"
+
+# Create a D1 database named "arena-store-db", then replace the database_id
+# below with the ID returned by `npx wrangler d1 create arena-store-db`.
+[[d1_databases]]
+binding = "DB"
+database_name = "arena-store-db"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
