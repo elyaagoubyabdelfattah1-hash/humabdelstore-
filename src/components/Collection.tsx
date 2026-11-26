@@ -1,9 +1,15 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { products, type Category, type Product } from "../data/products";
 import ProductCard from "./ProductCard";
 import QuickView from "./QuickView";
 
 export default function Collection() {
+  const [catalogue, setCatalogue] = useState<Product[]>(products);
+  useEffect(() => {
+    fetch("/api/products").then(r => r.ok ? r.json() : Promise.reject()).then(d => {
+      if (Array.isArray(d.products)) setCatalogue(d.products);
+    }).catch(() => {});
+  }, []);
   const [activeCategory, setActiveCategory] = useState<string>("All Products");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -11,16 +17,16 @@ export default function Collection() {
   // Compute only the categories that actually contain products
   const availableCategories = useMemo(() => {
     const present = new Set<Category>();
-    for (const p of products) {
+    for (const p of catalogue) {
       present.add(p.category);
     }
     // Return with "All Products" first, followed by alphabetical categories
     return ["All Products", ...Array.from(present).sort()];
-  }, []);
+  }, [catalogue]);
 
   // Filter products based on active category and optional quick search
   const filteredProducts = useMemo(() => {
-    return products.filter((p) => {
+    return catalogue.filter((p) => {
       const matchesCategory =
         activeCategory === "All Products" || p.category === activeCategory;
       const matchesSearch =
@@ -30,12 +36,12 @@ export default function Collection() {
         p.description.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-  }, [activeCategory, searchQuery]);
+  }, [catalogue, activeCategory, searchQuery]);
 
   // Count per category
   const getCount = (cat: string) => {
-    if (cat === "All Products") return products.length;
-    return products.filter((p) => p.category === cat).length;
+    if (cat === "All Products") return catalogue.length;
+    return catalogue.filter((p) => p.category === cat).length;
   };
 
   return (
@@ -99,7 +105,7 @@ export default function Collection() {
               <span className="font-semibold text-navy-900">
                 {filteredProducts.length}
               </span>{" "}
-              of <span className="font-semibold text-navy-900">{products.length}</span>{" "}
+              of <span className="font-semibold text-navy-900">{catalogue.length}</span>{" "}
               products
               {activeCategory !== "All Products" && (
                 <span>
