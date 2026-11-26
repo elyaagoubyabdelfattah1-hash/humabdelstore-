@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy-950: #060b1a;
+  --color-navy-900: #0a1228;
+  --color-navy-800: #111c3a;
+  --color-navy-700: #1b2950;
+  --color-gold: #c6a15b;
+  --color-gold-light: #e0c58e;
+  --color-gold-dark: #a8843f;
+  --color-beige: #eee5d3;
+  --color-ivory: #faf8f3;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ivory font-sans text-navy-900 antialiased;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-navy-950);
+}
+
+.gold-text {
+  background: linear-gradient(120deg, #e8d3a2 0%, #c6a15b 45%, #e0c58e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-fade-in { animation: fade-in 0.25s ease-out both; }
+.animate-rise-in { animation: rise-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
