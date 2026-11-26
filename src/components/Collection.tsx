@@ -4,7 +4,13 @@ import ProductCard from "./ProductCard";
 import QuickView from "./QuickView";
 
 export default function Collection() {
-  const [catalogue, setCatalogue] = useState<Product[]>(products);\n  useEffect(() => { fetch("/api/products").then(r => r.ok ? r.json() : Promise.reject()).then(d => { if (Array.isArray(d.products)) setCatalogue(d.products); }).catch(() => {}); }, []);\n  const [activeCategory, setActiveCategory] = useState<string>("All Products");
+  const [catalogue, setCatalogue] = useState<Product[]>(products);
+  useEffect(() => {
+    fetch("/api/products").then(r => r.ok ? r.json() : Promise.reject()).then(d => {
+      if (Array.isArray(d.products)) setCatalogue(d.products);
+    }).catch(() => {});
+  }, []);
+  const [activeCategory, setActiveCategory] = useState<string>("All Products");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
